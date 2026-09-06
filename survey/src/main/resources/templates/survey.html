@@ -5,6 +5,16 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+	<header>
+		<h1>お客様アンケート</h1>
+		<p>本日はご来店いただき誠にありがとうございます。今後のサービス向上のため、アンケートへのご協力をお願いいたします。</p>
+	</header>
+	
+	<form action="/check" method="post">
+		<h1>テスト</h1>
+	</form>
+	<div th:if="${flag}">
+		<h1>見えてる？</h1>
+	</div>
 </body>
 </html>

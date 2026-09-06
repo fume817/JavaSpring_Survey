@@ -1,8 +1,8 @@
 package com.example.survey.Entity;
 
-import org.springframework.data.annotation.Id;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -14,5 +14,6 @@ public class FrequencyEntity {
 	@Id
 	private Integer id;
 	
+	@Column(name="ラベル")
 	private String frequency;
 }

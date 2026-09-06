@@ -1,43 +1,57 @@
 package com.example.survey.Entity;
 
-import org.springframework.data.annotation.Id;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name="answer")
+@Table(name = "answer")
 @Data
 
 public class AnswerEntity {
-@Id
-private Integer id;
+	@Id
+	private Integer id;
 
-private String mail;
+	private String name;
 
-private Integer ansAge;
+	private String mail;
 
-private Integer ansStoreName;
+	@Column(name = "age")
+	private Integer ansAge;
 
-private Integer ansFrequency;
+	@Column(name = "店舗名")
+	private Integer ansStoreName;
 
-private Integer ansPorpose;
+	@Column(name = "頻度")
+	private Integer ansFrequency;
 
-private Integer ansDish;
+	@Column(name = "目的")
+	private Integer ansPorpose;
 
-private Integer ansService;
+	@Column(name = "料理")
+	private Integer ansDish;
 
-private Integer ansClean;
+	@Column(name = "接客")
+	private Integer ansService;
 
-private String ansReccomend;
+	@Column(name = "店内")
+	private Integer ansClean;
 
-private String ansOpnion;
+	@Column(name = "おすすめ")
+	private String ansReccomend;
 
-private Integer ansExMenu;
+	@Column(name = "意見")
+	private String ansOpnion;
 
-private Integer ansExImpress;
+	@Column(name = "特別メニュー")
+	private Integer ansExMenu;
 
-private String ansDate;
+	@Column(name = "満足度")
+	private Integer ansExImpress;
+
+	@Column(name = "取得日時")
+	private String ansDate;
 
 }
