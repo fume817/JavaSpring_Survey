@@ -22,7 +22,7 @@ public class AnswerEntity {
 	private Integer ansAge;
 
 	@Column(name = "店舗名")
-	private Integer ansStoreName;
+	private Integer ansStoreID;
 
 	@Column(name = "頻度")
 	private Integer ansFrequency;

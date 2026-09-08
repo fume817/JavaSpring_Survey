@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.survey.Form.SurveyForm;
 import com.example.survey.service.SurveyService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,11 @@ public class SurveyController {
 	public String survey(
 			@RequestParam(required = true) Integer id, Model model) {
 
-		boolean Flag = surveyService.check(id);
+		boolean flag = surveyService.check(id);
 		
-		model.addAttribute("flag",Flag);
+		model.addAttribute("survey",new SurveyForm());
+		model.addAttribute("id",id);
+		model.addAttribute("flag",flag);
 		return "survey";
 	}
 	
