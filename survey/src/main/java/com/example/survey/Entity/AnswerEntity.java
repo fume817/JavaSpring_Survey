@@ -28,7 +28,7 @@ public class AnswerEntity {
 	private Integer ansFrequency;
 
 	@Column(name = "目的")
-	private Integer ansPorpose;
+	private Integer ansPurpose_id;
 
 	@Column(name = "料理")
 	private Integer ansDish;
