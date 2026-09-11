@@ -52,7 +52,6 @@ public class SurveyController {
 			BindingResult result,
 			Model model) {
 		if (result.hasErrors()) {
-			//確認画面でエラー検知できずに送信した場合の表示文
 			String alert = "入力内容に誤りがあります";
 			System.out.println(result.getAllErrors());
 			model.addAttribute("survey", form);

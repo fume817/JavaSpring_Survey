@@ -86,7 +86,7 @@ public class SurveyService {
 		
 		answer.setAnsDate(time);
 		answer.setAnsStringPurpose(purpose);
-		
+		answer.setId(null);
 		return answer;
 		
 	}
