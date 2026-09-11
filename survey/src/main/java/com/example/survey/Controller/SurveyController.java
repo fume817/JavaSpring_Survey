@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.survey.DTO.SurveyDTO;
+import com.example.survey.Entity.AnswerEntity;
 import com.example.survey.Form.SurveyForm;
 import com.example.survey.service.SurveyService;
 
@@ -25,7 +26,9 @@ import lombok.RequiredArgsConstructor;
 public class SurveyController {
 
 	private final SurveyService surveyService;
+	
 
+	//アンケートフォーム
 	@GetMapping
 	public String survey(
 			@RequestParam(required = true) Integer id, Model model) {
@@ -35,33 +38,62 @@ public class SurveyController {
 		//店舗IDだけ先に詰めておく
 		SurveyForm form = new SurveyForm();
 		form.setAnsStoreID(id);
-
+		form.setFlag(flag);
+		
 		model.addAttribute("survey", form);
 		model.addAttribute("Lists", surveyQuestion());
-		model.addAttribute("id", id);
-		model.addAttribute("flag", flag);
+
 		return "survey";
 	}
 
+	//確認画面
 	@PostMapping("/check")
 	public String check(@Valid @ModelAttribute("survey") SurveyForm form,
 			BindingResult result,
 			Model model) {
 		if (result.hasErrors()) {
+			//確認画面でエラー検知できずに送信した場合の表示文
+			String alert = "入力内容に誤りがあります";
 			System.out.println(result.getAllErrors());
-			model.addAttribute("survey",form);
-			model.addAttribute("Lists",surveyQuestion());
+			model.addAttribute("survey", form);
+			model.addAttribute("Lists", surveyQuestion());
+			model.addAttribute("alert", alert);
 			return "survey";
 		}
+
+		model.addAttribute("survey", form);
+		model.addAttribute("Lists", surveyQuestion());
 		return "check";
 	}
 
+	//書き直し処理
+	@PostMapping("/reInput")
+	public String reInput(@ModelAttribute("survey") SurveyForm form, Model model) {
+		model.addAttribute("survey", form);
+		model.addAttribute("Lists", surveyQuestion());
+		return "survey";
+	}
+
+	//送信処理
 	@PostMapping("/submit")
-	public String submit() {
+	public String submit(@Valid @ModelAttribute("survey") SurveyForm form,
+			BindingResult result,
+			Model model) {
+
+		if (result.hasErrors()) {
+			String alert = "入力内容に誤りがあります";
+			System.out.println(result.getAllErrors());
+			model.addAttribute("survey", form);
+			model.addAttribute("Lists", surveyQuestion());
+			model.addAttribute("alert", alert);
+			return "survey";
+		}
+		AnswerEntity answer = surveyService.Mapping(form);
+		surveyService.saveAnswer(answer);
 
 		return "thanks";
 	}
-	
+
 	//質問の選択肢をすべて格納
 	public SurveyDTO surveyQuestion() {
 		SurveyDTO surveyQuestion = surveyService.putSurveyQuestion();

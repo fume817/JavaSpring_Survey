@@ -2,6 +2,8 @@ package com.example.survey.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -12,6 +14,7 @@ import lombok.Data;
 
 public class AnswerEntity {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private String name;
@@ -28,7 +31,7 @@ public class AnswerEntity {
 	private Integer ansFrequency;
 
 	@Column(name = "目的")
-	private Integer ansPurpose_id;
+	private String ansStringPurpose;
 
 	@Column(name = "料理")
 	private Integer ansDish;

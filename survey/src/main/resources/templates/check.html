@@ -1,145 +1,138 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
 	<title>来店アンケート</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	<script th:src="@{/js/input.js}"></script>
 </head>
 
 <body>
-	<!--<header>
-		<h1>お客様アンケート</h1>
-		<p>本日はご来店いただき誠にありがとうございます。今後のサービス向上のため、アンケートへのご協力をお願いいたします。</p>
-	</header>
-	
-	<form action="/check" method="post">
-		<h1>テスト</h1>
-	</form>
-	<div th:if="${flag}">
-		<h1>見えてる？</h1>
-	</div>
-	
-	
-	<select>
-        <option th:each="option : ${questionList}"
-                th:value="${option.id}"
-                th:text="${option.label}">
-        </option>
-    </select>
-	
-	
-	-->
+
 	<header>
 		<h1>お客様アンケート</h1>
 		<p>本日はご来店いただき誠にありがとうございます。今後のサービス向上のため、アンケートへのご協力をお願いいたします。</p>
 	</header>
 
-	<form th:action="@{/survey/check}" th:object="${survey}" method="post">
+	<form th:action="@{/survey/submit}" th:object="${survey}" method="post" id="form">
 
 		<input type="hidden" th:field="*{flag}" />
 		<input type="hidden" th:field="*{ansStoreID}" />
-
-		<!--名前-->
-		<div>
-			<label>お名前</label>
-			<input type="text" th:field="*{name}" required/>
-			<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
-		</div>
-
-		<!--メールアドレス-->
-		<div>
-			<label>メールアドレス</label>
-			<input type="text" th:field="*{mail}" required/>
-			<p th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>
-		</div>
-
-		<!--年齢-->
-		<div>
-			<label>年齢層</label><br>
-			<label th:each="age : ${Lists.ageEntities}">
-				<input type="radio" th:field="*{ansAge}" th:value="${age.id}" required/>
-				<span th:text="${age.age}">年齢</span>
-			</label>
-			<p th:if="${#fields.hasErrors('ansAge')}" th:errors="*{ansAge}"></p>
-		</div>
-
-		<!--目的-->
-		<div>
-			<label>来店目的(複数選択可)</label><br>
-			<label th:each="purpose : ${Lists.purposeEntities}">
-				<input type="checkbox" th:field="*{ansPurpose}" th:value="${purpose.id}" required/>
-				<span th:text="${purpose.purpose}">目的</span>
-			</label>
-		</div>
 		
-		<!--来店頻度-->
-		<div>
-			<label>来店頻度</label><br>
-			<label th:each="frequency : ${Lists.frequencyEntities}">
-				<input type="radio" th:field="*{ansFrequency}" th:value="${frequency.id}" required/>
-				<span th:text="${frequency.frequency}">頻度</span>
-			</label>
-		</div>
-	
-		<!--料理評価-->
-		<div>
-			<label>料理の満足度(1:大変不満〜5:大変満足)</label><br>
-			<label th:each="i : ${#numbers.sequence(1,5)}">
-				<input type="radio" th:field="*{ansDish}" th:value="${i}" th:text="${i}" required/>
-			</label>
-			<p th:if="${#fields.hasErrors('ansDish')}" th:errors="*{ansDish}"></p>
-		</div>
-		
-		<!--接客評価-->
-		<div>
-			<label>接客の満足度(1:大変不満〜5:大変満足)</label><br>
-			<label th:each="i : ${#numbers.sequence(1,5)}">
-				<input type="radio" th:field="*{ansService}" th:value="${i}" th:text="${i}" required/>
-			</label>
-			<p th:if="${#fields.hasErrors('ansService')}" th:errors="*{ansService}"></p>
-		</div>
-		
-		<!--清潔度評価-->
-		<div>
-			<label>店内の清潔感(1:大変不満〜5:大変満足)</label><br>
-			<label th:each="i : ${#numbers.sequence(1,5)}">
-				<input type="radio" th:field="*{ansClean}" th:value="${i}" th:text="${i}" required/>
-			</label>
-			<p th:if="${#fields.hasErrors('ansClean')}" th:errors="*{ansClean}"></p>
-		</div>
-		
-		<!--おすすめメニュー-->
-		<div>
-			<label>おすすめメニュー</label>
-			<input type="text" th:field="*{ansReccomend}" />
-			<p th:if="${#fields.hasErrors('ansReccomend')}" th:errors="*{ansReccomend}"></p>
-		</div>
-		
-		<!--意見感想-->
-		<div>
-			<label>ご意見・ご感想</label>
-			<textarea th:field="*{ansOpnion}"></textarea>
-			<p th:if="${#fields.hasErrors('ansOpnion')}" th:errors="*{ansOpnion}"></p>
-		</div>
-		
-		<!-- 長崎支店限定項目 -->
-		<div th:if="${flag}">
-			<h3>バカうまハンバーグに関する調査</h3>
+		<div class="field-readonly">
+			<!--名前-->
+			<div class="field">
+				<label class="field-label">お名前</label>
+				<input type="text" th:field="*{name}" required />
+				<p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+			</div>
 
-			<label>バカうまハンバーグを注文しましたか？</label><br>
-			<label><input type="radio" th:field="*{ansExMenu}" value="1" />注文した</label>
-			<label><input type="radio" th:field="*{ansExMenu}" value="0" />注文しなかった</label>
+			<!--メールアドレス-->
+			<div class="field">
+				<label class="field-label">メールアドレス</label>
+				<input type="text" th:field="*{mail}" required />
+				<p class="field-error" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>
+			</div>
 
-			<div>
-				<label>満足度(注文した方のみ)</label><br>
-				<label th:each="i : ${#numbers.sequence(1,5)}">
-					<input type="radio" th:field="*{ansExImpress}" th:value="${i}" th:text="${i}"/>
+			<!--年齢-->
+			<div class="field">
+				<label class="field-label">年齢層</label>
+				<label class="option-label" th:each="age : ${Lists.ageEntities}">
+					<input type="radio" th:field="*{ansAge}" th:value="${age.id}" required />
+					<span th:text="${age.age}">年齢</span>
+				</label>
+				<p class="field-error" th:if="${#fields.hasErrors('ansAge')}" th:errors="*{ansAge}"></p>
+			</div>
+
+			<!--目的-->
+			<div class="field">
+				<label class="field-label">来店目的(複数選択可)</label>
+				<label class="option-label" th:each="purpose : ${Lists.purposeEntities}">
+					<input type="checkbox" th:field="*{ansPurpose}" th:value="${purpose.id}" required />
+					<span th:text="${purpose.purpose}">目的</span>
 				</label>
 			</div>
-			<p th:if="${#fields.hasErrors('checkEX')}" th:errors="*{checkEX}"></p>
-		</div>
 
-		<button type="submit">確認画面へ</button>
+			<!--来店頻度-->
+			<div class="field">
+				<label class="field-label">来店頻度</label>
+				<label class="option-label" th:each="frequency : ${Lists.frequencyEntities}">
+					<input type="radio" th:field="*{ansFrequency}" th:value="${frequency.id}" required />
+					<span th:text="${frequency.frequency}">頻度</span>
+				</label>
+			</div>
+
+			<!--料理評価-->
+			<div class="field">
+				<label class="field-label">料理の満足度</label>
+				<span class="field-hint">1:大変不満〜5:大変満足</span>
+				<div class="rating-group">
+					<label class="option-label rating-option" th:each="i : ${#numbers.sequence(1,5)}">
+						<input type="radio" th:field="*{ansDish}" th:value="${i}" th:text="${i}" required />
+					</label>
+				</div>
+				<p class="field-error" th:if="${#fields.hasErrors('ansDish')}" th:errors="*{ansDish}"></p>
+			</div>
+
+			<!--接客評価-->
+			<div class="field">
+				<label class="field-label">接客の満足度</label>
+				<span class="field-hint">1:大変不満〜5:大変満足</span>
+				<div class="rating-group">
+					<label class="option-label rating-option" th:each="i : ${#numbers.sequence(1,5)}">
+						<input type="radio" th:field="*{ansService}" th:value="${i}" th:text="${i}" required />
+					</label>
+				</div>
+				<p class="field-error" th:if="${#fields.hasErrors('ansService')}" th:errors="*{ansService}"></p>
+			</div>
+
+			<!--清潔度評価-->
+			<div class="field">
+				<label class="field-label">店内の清潔感</label>
+				<span class="field-hint">1:大変不満〜5:大変満足</span>
+				<div class="rating-group">
+					<label class="option-label rating-option" th:each="i : ${#numbers.sequence(1,5)}">
+						<input type="radio" th:field="*{ansClean}" th:value="${i}" th:text="${i}" required />
+					</label>
+				</div>
+				<p class="field-error" th:if="${#fields.hasErrors('ansClean')}" th:errors="*{ansClean}"></p>
+			</div>
+
+			<!--おすすめメニュー-->
+			<div class="field">
+				<label class="field-label">おすすめメニュー</label>
+				<input type="text" th:field="*{ansReccomend}" />
+				<p class="field-error" th:if="${#fields.hasErrors('ansReccomend')}" th:errors="*{ansReccomend}"></p>
+			</div>
+
+			<!--意見感想-->
+			<div class="field">
+				<label class="field-label">ご意見・ご感想</label>
+				<textarea th:field="*{ansOpnion}"></textarea>
+				<p class="field-error" th:if="${#fields.hasErrors('ansOpnion')}" th:errors="*{ansOpnion}"></p>
+			</div>
+
+			<!-- 長崎支店限定項目 -->
+			<div class="field field-highlight" th:if="${flag}">
+				<h3>バカうまハンバーグに関する調査</h3>
+
+				<label class="field-label">バカうまハンバーグを注文しましたか？</label><br>
+				<label class="option-label"><input type="radio" th:field="*{ansExMenu}" value="1" />注文した</label>
+				<label class="option-label"><input type="radio" th:field="*{ansExMenu}" value="0" />注文しなかった</label>
+
+				<div style="margin-top:0.75rem;">
+					<label class="field-label">満足度(注文した方のみ)</label>
+					<div class="rating-group">
+						<label class="option-label rating-option" th:each="i : ${#numbers.sequence(1,5)}">
+							<input type="radio" th:field="*{ansExImpress}" th:value="${i}" th:text="${i}" />
+						</label>
+					</div>
+				</div>
+				<p class="field-error" th:if="${#fields.hasErrors('checkEX')}" th:errors="*{checkEX}"></p>
+			</div>
+		</div>
+		<button type="submit" class="btn btn-primary">確認画面へ</button>
 	</form>
 </body>
 
