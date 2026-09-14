@@ -90,8 +90,16 @@ public class SurveyController {
 		AnswerEntity answer = surveyService.Mapping(form);
 		surveyService.saveAnswer(answer);
 
+		return "redirect:/done";
+	}
+	
+	//アンケート完了後にページ更新を入れると再度投稿されてしまう不具合の解決
+	@GetMapping("/done")
+	public String done() {
 		return "thanks";
 	}
+	
+	
 
 	//質問の選択肢をすべて格納
 	public SurveyDTO surveyQuestion() {
