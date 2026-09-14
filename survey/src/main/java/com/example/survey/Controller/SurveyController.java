@@ -90,7 +90,7 @@ public class SurveyController {
 		AnswerEntity answer = surveyService.Mapping(form);
 		surveyService.saveAnswer(answer);
 
-		return "redirect:/done";
+		return "redirect:/survey/done";
 	}
 	
 	//アンケート完了後にページ更新を入れると再度投稿されてしまう不具合の解決
