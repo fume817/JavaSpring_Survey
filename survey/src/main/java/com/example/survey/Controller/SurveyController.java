@@ -26,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 public class SurveyController {
 
 	private final SurveyService surveyService;
-	
 
 	//アンケートフォーム
 	@GetMapping
@@ -39,7 +38,7 @@ public class SurveyController {
 		SurveyForm form = new SurveyForm();
 		form.setAnsStoreID(id);
 		form.setFlag(flag);
-		
+
 		model.addAttribute("survey", form);
 		model.addAttribute("Lists", surveyQuestion());
 
@@ -58,14 +57,18 @@ public class SurveyController {
 			model.addAttribute("Lists", surveyQuestion());
 			model.addAttribute("alert", alert);
 			return "survey";
+		} else if (surveyService.mailCheck(form)) {
+			String alert ="本日は回答済みです";
+			model.addAttribute("Lists", surveyQuestion());
+			model.addAttribute("alert", alert);
+			return "survey";
 		}
-
 		model.addAttribute("survey", form);
 		model.addAttribute("Lists", surveyQuestion());
 		return "check";
 	}
 
-	//書き直し処理
+	//書き直し画面への遷移
 	@PostMapping("/reInput")
 	public String reInput(@ModelAttribute("survey") SurveyForm form, Model model) {
 		model.addAttribute("survey", form);
@@ -86,20 +89,23 @@ public class SurveyController {
 			model.addAttribute("Lists", surveyQuestion());
 			model.addAttribute("alert", alert);
 			return "survey";
+		} else if (surveyService.mailCheck(form)) {
+			String alert ="本日は回答済みです";
+			model.addAttribute("Lists", surveyQuestion());
+			model.addAttribute("alert", alert);
+			return "survey";
 		}
 		AnswerEntity answer = surveyService.Mapping(form);
 		surveyService.saveAnswer(answer);
 
 		return "redirect:/survey/done";
 	}
-	
+
 	//アンケート完了後にページ更新を入れると再度投稿されてしまう不具合の解決
 	@GetMapping("/done")
 	public String done() {
 		return "thanks";
 	}
-	
-	
 
 	//質問の選択肢をすべて格納
 	public SurveyDTO surveyQuestion() {

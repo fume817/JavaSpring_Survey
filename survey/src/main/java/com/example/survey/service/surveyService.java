@@ -1,7 +1,9 @@
 package com.example.survey.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,10 +38,10 @@ public class SurveyService {
 		Integer tinyint;
 
 		tinyint = storeNameRepository.checkFlag(id);
-		
+
 		if (tinyint == null) {
-	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "店舗が見つかりません");
-	    }
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "店舗が見つかりません");
+		}
 
 		boolean flag;
 
@@ -58,11 +60,14 @@ public class SurveyService {
 	}
 
 	//時刻の取得処理
+	//09/17ZonedDateTimeに変更
 	private String getTime() {
 
-		Date date = new Date();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy'/'MM'/'dd' 'HH':'mm':'ss");
-		String nowDate = format.format(date);
+		//Date date = new Date();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy'/'MM'/'dd' 'HH':'mm':'ss");
+		//String nowDate = format.format(date);
+
+		String nowDate = ZonedDateTime.now(ZoneId.of("Asia/Tokyo")).format(formatter);
 
 		return nowDate;
 	}
@@ -73,25 +78,42 @@ public class SurveyService {
 		String result = purposeList.stream().map(String::valueOf).collect(Collectors.joining(","));
 		return result;
 	}
+
 	//formをEntityにMappingする処理
 	public AnswerEntity Mapping(SurveyForm survey) {
-		
+
 		String time = getTime();
 		String purpose = ListToString(survey);
 		AnswerEntity answer = new AnswerEntity();
-		
+
 		ModelMapper mapping = new ModelMapper();
 		survey.checkEx();
-		mapping.map(survey,answer);
-		
+		mapping.map(survey, answer);
+
 		answer.setAnsDate(time);
 		answer.setAnsStringPurpose(purpose);
 		answer.setId(null);
 		return answer;
-		
+
 	}
+
 	//保存処理
 	public void saveAnswer(AnswerEntity answer) {
 		answerRepository.save(answer);
 	}
+
+	//メールアドレスの重複処理
+	public boolean mailCheck(SurveyForm form) {
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		
+		if (answerRepository.existsByMail(form.getMail())) {
+			//同日中に同じメールアドレスから登録されている
+			return answerRepository.existsByAnsDateStartingWithAndMail(LocalDate.now(ZoneId.of("Asia/Tokyo")).format(formatter), form.getMail());
+		}else {
+			//メールアドレスが登録済みでない
+			return false;
+		}
+	}
+
 }

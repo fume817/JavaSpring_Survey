@@ -156,7 +156,13 @@
 			</div>
 			<p class="field-error" th:if="${#fields.hasErrors('checkEX')}" th:errors="*{checkEX}"></p>
 		</div>
-		
+		<div class="field">
+			<input type="checkbox" th:field="*{doui}" id="doui"/>
+			<label for="doui">
+				<a href ="#">利用規約</a>および<a href="#">プライバシーポリシー</a>の内容に同意します。
+			</label>
+			<p class="field-error" th:if="${#fields.hasErrors('doui')}" th:errors="*{doui}"></p>
+		</div>
 		<button type="submit" class="btn btn-primary">確認画面へ</button>
 	</form>
 </body>
